@@ -1,67 +1,38 @@
-describe.skip('visit google', () => {
-    it('pesquisa inatel', () => {
-        cy.visit("https://google.com.br");
-        cy.get("input[name=q]").type("INATEL {enter}")
+describe('Acessando o DemoBlaze', ()=>{
+
+    beforeEach(()=> {
+        cy.viewport(1920, 1080)
+        cy.wait(2000)
+    })
+
+    it('Buscado a aba de monitores', () => {
+        cy.visit('https://www.demoblaze.com/index.html')
+        cy.wait(1000)
+        buscaMonitores()
+    })
+
+    it('Passando e voltando de tela', () => {
+        cy.visit('https://www.demoblaze.com/index.html')
+        cy.wait(1000)
+        cy.get('#next2').click()
+        cy.wait(1000)
+        cy.get('#prev2').click()
+    })
+
+    it('Acessando um item da lista que nn existe', () => {
+        cy.get('.list-group-item').eq(4).click() //Teste negativo
+    })
+
+    it('Preenchendo os campos de login e voltando a tela inicial', () => {
+        cy.visit('https://www.demoblaze.com/index.html')
+        cy.get('#login2').click()
+        cy.get('#loginusername').click().type('leoteste@inate.br')
+        cy.get('#loginpassword').click().type('deviaSerForms123')
+        cy.visit('https://www.demoblaze.com/index.html')
+        
     })
 })
 
-describe.skip('Formulario testQA cadastro', ()=>{
-    it('criando um usuário no globalQA', () => {
-        cy.visit("https://www.globalsqa.com/angularJs-protractor/registration-login-example/#/login")
-        cy.get(".btn-link").click();
-        cy.get("#firstName").type("Ítalo")
-        cy.get("input[name=lastName]").type("Moura")
-        cy.get("#username").type("sdfsa")
-        cy.get("#password").type("asfsafs")
-        cy.get(".btn-primary").click()
-        cy.get(".alert-success").should("contain.text", "Registration successful")
-    })
-
-    it('Login na plataforma com sucesso!', () => {
-        let userInfo = createUser()
-        cy.visit("https://www.globalsqa.com/angularJs-protractor/registration-login-example/#/login")
-        cy.get("input[name=username]").type(userInfo[0])
-        cy.get("input[name=password]").type(userInfo[1])
-        cy.get(".btn-primary").click()
-    })
-})
-
-describe('teste globalQA radio,select e checkbox', () => {
-    it('campos diferenciados', () => {
-        cy.on('uncaught:exception', ()=> {
-            return false
-        })
-        cy.visit("https://www.globalsqa.com/samplepagetest/")
-        cy.get("#g2599-name").type("teste")
-        cy.get("#g2599-experienceinyears").select('3-5').should("have.value", "3-5")
-        cy.get(".grunion-field-checkbox-multiple-wrap [type=checkbox]").first().check()
-        cy.get(".grunion-field-checkbox-multiple-wrap [type=checkbox]").check("Automation Testing")
-
-        cy.get(".grunion-field-radio-wrap [type=radio]").first().check()
-        cy.get(".grunion-field-radio-wrap [type=radio]").last().check()
-
-        cy.get("input[name=file-553]").selectFile('cypress/fixtures/batman.jpg', { action: 'drag-drop' })
-    })
-})
-
-function createUser() {
-    let hora = new Date().getHours().toString();
-    let min = new Date().getMinutes().toString();
-    let sec = new Date().getSeconds().toString();
-
-    let username = 'testQA_' + hora + min + sec
-    let password = hora + min + sec
-
-    let user_info = [username, password]
-
-    cy.visit("https://www.globalsqa.com/angularJs-protractor/registration-login-example/#/login")
-    cy.get(".btn-link").click();
-    cy.get("#firstName").type("Ítalo")
-    cy.get("input[name=lastName]").type("Moura")
-    cy.get("#username").type(username)
-    cy.get("#password").type(password)
-    cy.get(".btn-primary").click()
-    cy.get(".alert-success").should("contain.text", "Registration successful")
-
-    return user_info;
+function buscaMonitores() {
+    cy.get('.list-group-item').eq(3).click()
 }
